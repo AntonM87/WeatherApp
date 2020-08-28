@@ -24,7 +24,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
+public class MainActivity extends AppCompatActivity
+//        implements LoaderManager.LoaderCallbacks<String>
+{
 
     private String TAG = "log";
 
@@ -75,17 +77,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         int columnIndexTime = cursor.getColumnIndex(WeatherCache.LAST_WEATHER_TIME);
         long time = Long.parseLong(cursor.getString(columnIndexTime));
 
-        Bundle bundle = new Bundle();
-        bundle.putString(COORD_A,piterCoordinate[0]);
-        bundle.putString(COORD_B,piterCoordinate[1]);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(COORD_A,piterCoordinate[0]);
+//        bundle.putString(COORD_B,piterCoordinate[1]);
 
 
-        long lastUpload = System.currentTimeMillis() - time;
-
-        if (LastWeatherQuery.LAST_WEATHER_QUERY == null || lastUpload > 3600000){
-            loader = getSupportLoaderManager().initLoader(1,bundle,this);
-            Toast.makeText(this,"Данные о погоде устарели\nи были обновлени",Toast.LENGTH_LONG).show();
-        }
+//        long lastUpload = System.currentTimeMillis() - time;
+//
+//        if (LastWeatherQuery.LAST_WEATHER_QUERY == null || lastUpload > 3600000){
+//            loader = getSupportLoaderManager().initLoader(1,bundle,this);
+//            Toast.makeText(this,"Данные о погоде устарели\nи были обновлени",Toast.LENGTH_LONG).show();
+//        }
 
         try {
 
@@ -106,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             windSpeedString = jsonWeather.getWindSpeed();
 
         } catch (JSONException e) {
-            Log.d(TAG, "JSONException: ошибка json в MainActivity->Piter");
+            Log.d(TAG, "JSONException: При первом запуске база пуста и работает это исключение" );
         }
 
         weatherDb.close();
@@ -121,8 +123,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             windSpeed.setText(windSpeedString + " м/c");
 
         }catch (NullPointerException e){
-            e.printStackTrace();
+            Log.d(TAG, "NullPointerException: При первом запуске база пуста и наполнить текущее значение погоды нечем");
         }
+
 //        Toolbar toolbar = (Toolbar)findViewById()
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
@@ -185,29 +188,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    @NonNull
-    @Override
-    public Loader<String> onCreateLoader(int i, @Nullable Bundle bundle) {
-        loader = new WeatherAsyncTaskLoader(this,bundle);
-        return loader;
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<String> loader, String result) {
-        //Добавление данных о времени запроса и результат запроса
-        WeatherDb weatherDb = new WeatherDb(this);
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(WeatherCache.LAST_WEATHER_TIME,String.valueOf(System.currentTimeMillis()));
-        contentValues.put(WeatherCache.WEATHER_QUERY_NAME,result);
-
-        weatherDb.update(WeatherCache.TABLE_NAME,contentValues,WeatherCache.COLUMN_ID + "=" + WeatherCache.COLUMN_ID_PITER,null);
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<String> loader) {
-
-    }
+//    @NonNull
+//    @Override
+//    public Loader<String> onCreateLoader(int i, @Nullable Bundle bundle) {
+//        loader = new WeatherAsyncTaskLoader(this,bundle);
+//        return loader;
+//    }
+//
+//    @Override
+//    public void onLoadFinished(@NonNull Loader<String> loader, String result) {
+//
+//        //Добавление данных о времени запроса и результат запроса
+//        WeatherDb weatherDb = new WeatherDb(this);
+//        ContentValues contentValues = new ContentValues();
+//
+//        contentValues.put(WeatherCache.LAST_WEATHER_TIME,String.valueOf(System.currentTimeMillis()));
+//        contentValues.put(WeatherCache.WEATHER_QUERY_NAME,result);
+//
+//        weatherDb.update(WeatherCache.TABLE_NAME,contentValues,WeatherCache.COLUMN_ID + "=" + WeatherCache.COLUMN_ID_PITER,null);
+//    }
+//
+//    @Override
+//    public void onLoaderReset(@NonNull Loader<String> loader) {
+//
+//    }
 
     // адаптер для вьюпейджера
     class SimpleFragmentPageAdapter extends FragmentPagerAdapter {
