@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="piter">Сантк-Петербург</string>
+    <string name="moscow">Москва</string>
+    <string name="pressure">Давление</string>
+    <string name="windSpeed">Скорость ветра</string>
+    <string name="apparentTemperature">Ощущается</string>
+    <string name="temperature">Tемпература</string>
+    <string name="summary">Сводка</string>
+</resources>
